@@ -142,7 +142,7 @@ fn find_line_val(line: String) -> usize {
 }
 
 fn main() {
-    let file = File::open("day1").unwrap();
+    let file = File::open("input").unwrap();
     let reader = BufReader::new(file);
 
     // Don't print stuff on panics
