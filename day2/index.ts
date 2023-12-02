@@ -6,12 +6,12 @@ const LIMIT_RED = 12;
 const LIMIT_GREEN = 13;
 const LIMIT_BLUE = 14;
 
-const parseLinePart1 = line => {
+const parseLinePart1 = (line: string) => {
   const [idPart, dataPart] = line.split(": ");
   const id = idPart.split(" ")[1];
   const sets = dataPart.split("; ");
 
-  let max = {
+  const max: {[k: string]: number} = {
     blue: 0,
     red: 0,
     green: 0
@@ -40,11 +40,11 @@ const part1 = fileContents
 
 console.log("part1", part1);
 
-const parseLinePart2 = line => {
+const parseLinePart2 = (line: string) => {
   const [_idPart, dataPart] = line.split(": ");
   const sets = dataPart.split("; ");
 
-  let max = {
+  const max: {[k: string]: number} = {
     blue: 0,
     red: 0,
     green: 0
