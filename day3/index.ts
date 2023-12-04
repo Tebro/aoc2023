@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import * as R from "npm:ramda";
 
 const fileContents = fs.readFileSync("input", { encoding: "utf8" });
 
@@ -53,7 +54,7 @@ fileContents
     });
   });
 
-const nearby = (n: NumPos, s: SymPos): boolean => {
+const _nearby = (n: NumPos, s: SymPos): boolean => {
   if (s.line === n.line) {
     return s.col === n.start - 1 || s.col === n.end + 1;
   }
@@ -64,8 +65,10 @@ const nearby = (n: NumPos, s: SymPos): boolean => {
   return false;
 };
 
+const nearby = R.curry(_nearby);
+
 const sum1 = numbers
-  .filter((n) => !!symbols.find((s) => nearby(n, s)))
+  .filter((n) => !!symbols.find(nearby(n)))
   .reduce(
     (a, b) => a + b.num,
     0,
@@ -76,7 +79,7 @@ console.log("part1", sum1);
 const sum2 = symbols
   .filter((s) => s.symbol === "*")
   .map((s) => {
-    const adjacentNums = numbers.filter((n) => nearby(n, s));
+    const adjacentNums = numbers.filter(nearby(R.__, s));
     if (adjacentNums.length !== 2) return 0;
     return adjacentNums[0].num * adjacentNums[1].num;
   }).reduce((a, b) => a + b, 0);
