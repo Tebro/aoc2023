@@ -1,10 +1,13 @@
 import fs from "node:fs";
+import * as R from "npm:ramda";
 
 const fileContents = fs.readFileSync("input", { encoding: "utf8" });
 
 const lines = fileContents
   .split("\n")
   .filter((l) => l.length > 3);
+
+const start1 = new Date();
 
 const part1 = lines
   .map((l) => {
@@ -24,7 +27,12 @@ const part1 = lines
     return score;
   }).reduce((a, b) => a + b, 0);
 
+const end1 = new Date();
+
 console.log("part1", part1);
+console.log("time1", end1.getTime() - start1.getTime());
+
+const start2 = new Date();
 
 interface ScratchCard {
   id: number;
@@ -51,10 +59,12 @@ const cards: ScratchCard[] = lines.map((l) => {
   };
 });
 
-const cardsMap = cards.reduce((a, b) => ({
-  ...a,
-  [b.id]: b,
-}), {} as { [key: number]: ScratchCard });
+//const cardsMap = cards.reduce((a, b) => ({
+//  ...a,
+//  [b.id]: b,
+//}), {} as { [key: number]: ScratchCard });
+
+const cardsMap: {[key: number]: ScratchCard} = R.indexBy(R.prop('id'), cards);
 
 for (let i = 0; i < cards.length; i++) {
   const matches = cards[i].numbers.filter((n) =>
@@ -66,4 +76,7 @@ for (let i = 0; i < cards.length; i++) {
   });
 }
 
+const end2 = new Date();
+
 console.log("part2", cards.length);
+console.log("time2", end2.getTime() - start2.getTime());
