@@ -1,5 +1,6 @@
 import Debug.Trace (traceShow)
 
+-- nice to have tool
 dbg x = traceShow x x
 
 parseInt x = read x :: Int
@@ -23,31 +24,26 @@ calcNext step (x:xs) = calcNext nextStep xs
   where
     nextStep = last x + step
 
-part1 :: [String] -> Int
-part1 lines = sum nexts
-  where
-    vals = map (parseInts . words) lines
-    expanded = map (\x -> calcLine [x] x) vals
-    rev = map reverse expanded
-    nexts = map (calcNext 0 ) rev
-
 calcNext2 :: Int -> [[Int]] -> Int
 calcNext2 step [] = step
 calcNext2 step (x:xs) = calcNext2 nextStep xs
   where
     nextStep = head x - step
 
-part2 :: [String] -> Int
-part2 lines = sum nexts
+bothParts :: [String] -> (Int, Int)
+bothParts lines = (sum nextsP1, sum nextsP2)
   where
     vals = map (parseInts . words) lines
     expanded = map (\x -> calcLine [x] x) vals
     rev = map reverse expanded
-    nexts = map (calcNext2 0) rev
+    nextsP1 = map (calcNext 0) rev
+    nextsP2 = map (calcNext2 0) rev
+
 
 main :: IO ()
 main = do
   input <- readFile "input"
   let ls = lines input
-  print (part1 ls)
-  print (part2 ls)
+  let (p1, p2) = bothParts ls
+  print p1
+  print p2
