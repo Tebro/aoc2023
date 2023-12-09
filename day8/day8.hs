@@ -15,12 +15,15 @@ navigate acc checker navigationSource current (x : xs)
     lr = if x == 'L' then fst else snd
     next = lr current
 
+lookup' :: String -> Map.Map String (String, String) -> (String, String)
+lookup' = Map.findWithDefault ("", "")
+
 part1 :: [String] -> Int
 part1 lines = do
   let instructions = cycle (head lines)
   let mapLines = drop 2 lines
   let navigationSource = Map.fromList (map split mapLines)
-  let (Just start) = Map.lookup "AAA" navigationSource
+  let start = lookup' "AAA" navigationSource
   let checker x = x == "ZZZ"
   navigate 0 checker navigationSource start instructions
 
@@ -34,7 +37,7 @@ part2 lines = do
   let navigationSource = Map.fromList (map split mapLines)
   let keys = Map.keys navigationSource
   let startKeys = filter (endsIn 'A') keys
-  let starts = map (\x -> Map.findWithDefault ("Foo", "Foo") x navigationSource) startKeys
+  let starts = map (`lookup'` navigationSource) startKeys
   let checker = endsIn 'Z'
   let lengths = map (\x -> navigate 0 checker navigationSource x instructions) starts
   foldl1 lcm lengths
